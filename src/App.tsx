@@ -16,14 +16,19 @@ export function App() {
       <section>
         <h2>Separate inputs</h2>
         <SeparateFields todayString={todayString} />
-        <h3>"Memorable dates" pattern</h3>
+        <h3>Links</h3>
         <ul>
           {[
             "https://design-system.service.gov.uk/patterns/dates/#asking-for-memorable-dates",
             "https://designsystem.digital.gov/components/memorable-date/",
+            "https://carbondesignsystem.com/components/date-picker/usage/#simple-date-input",
+            "https://m3.material.io/components/date-pickers/guidelines#07d8ef51-1085-4838-b20f-2a0aa62dabe0",
+            "https://hds.hel.fi/components/date-input/#when-to-use-the-date-picker",
           ].map((href) => (
             <li key={href}>
-              <a href={href}>{href}</a>
+              <a href={href} className="hover:text-blue-500">
+                {href}
+              </a>
             </li>
           ))}
         </ul>
