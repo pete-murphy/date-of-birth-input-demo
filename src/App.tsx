@@ -296,10 +296,10 @@ function Button(props: {
   const variant = props.variant ?? "primary";
   return (
     <button
-      className={`rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-all hover:bg-blue-800 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
+      className={`rounded-md px-6 py-1 font-medium transition-all focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
         variant === "secondary"
-          ? "bg-transparent text-red-600 hover:bg-red-100 hover:text-red-800"
-          : ""
+          ? "bg-transparent text-red-500 hover:bg-red-100 hover:text-red-600"
+          : "bg-blue-600 text-white hover:bg-blue-900"
       }`}
       type={variant === "secondary" ? "button" : "submit"}
       onClick={props.onClick}
