@@ -45,6 +45,7 @@ function DatePicker(props: { todayString: string }) {
     value,
     todayString: props.todayString,
   });
+  const isEmpty = value === "";
 
   const showError = errorMessage != null && hasSubmitted;
   return (
@@ -90,32 +91,42 @@ function DatePicker(props: { todayString: string }) {
         <Button>
           <span className="flex flex-row items-center gap-2">Submit</span>
         </Button>
-        <Button
-          onClick={() => {
-            setValue("");
-            setHasSubmitted(false);
-            setSuccessfullySubmitted(null);
-          }}
-          variant="secondary"
-        >
-          <span className="flex flex-row items-center gap-2">
-            Reset
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
+        <AnimatePresence>
+          {!isEmpty && (
+            <motion.div
+              initial={{ width: "auto", overflow: "visible" }}
+              animate={{ width: "auto", overflow: "visible" }}
+              exit={{ width: 0, overflow: "hidden" }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </span>
-        </Button>
+              <Button
+                onClick={() => {
+                  setValue("");
+                  setHasSubmitted(false);
+                  setSuccessfullySubmitted(null);
+                }}
+                variant="secondary"
+              >
+                <span className="flex flex-row items-center gap-2">
+                  Reset
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-6 w-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </span>
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <SubmittedConfirmation dateString={successfullySubmitted} />
     </form>
@@ -137,6 +148,7 @@ function SeparateFields(props: { todayString: string }) {
     string | null
   >(null);
 
+  const isEmpty = [monthValue, dayValue, yearValue].every((v) => v === "");
   const value =
     monthValue !== "" && dayValue !== "" && yearValue !== ""
       ? `${yearValue.padStart(4, "0")}-${monthValue}-${dayValue.padStart(
@@ -231,6 +243,7 @@ function SeparateFields(props: { todayString: string }) {
             type="number"
             max={props.todayString.slice(4)}
             maxLength={4}
+            min={1900}
             onChange={(e) => setYearValue(e.target.value)}
             inputMode="numeric"
             placeholder="Year"
@@ -251,34 +264,44 @@ function SeparateFields(props: { todayString: string }) {
         <Button>
           <span className="flex flex-row items-center gap-2">Submit</span>
         </Button>
-        <Button
-          onClick={() => {
-            setMonthValue("");
-            setDayValue("");
-            setYearValue("");
-            setHasSubmitted(false);
-            setSuccessfullySubmitted(null);
-          }}
-          variant="secondary"
-        >
-          <span className="flex flex-row items-center gap-2">
-            Reset
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="h-6 w-6"
+        <AnimatePresence>
+          {!isEmpty && (
+            <motion.div
+              initial={{ width: "auto", overflow: "visible" }}
+              animate={{ width: "auto", overflow: "visible" }}
+              exit={{ width: 0, overflow: "hidden" }}
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </span>
-        </Button>
+              <Button
+                onClick={() => {
+                  setMonthValue("");
+                  setDayValue("");
+                  setYearValue("");
+                  setHasSubmitted(false);
+                  setSuccessfullySubmitted(null);
+                }}
+                variant="secondary"
+              >
+                <span className="flex flex-row items-center gap-2">
+                  Reset
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="h-6 w-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </span>
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
       <SubmittedConfirmation dateString={successfullySubmitted} />
     </form>
