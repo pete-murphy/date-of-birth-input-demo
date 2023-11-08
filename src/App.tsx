@@ -5,7 +5,7 @@ export function App() {
   const now = new Date();
   const todayString = now.toISOString();
   return (
-    <main className="lg:prose-l container prose m-auto p-2">
+    <main className="lg:prose-l container prose m-auto break-words p-2">
       <h1>Date of birth inputs demo</h1>
       <section>
         <h2>Native HTML5 date-picker</h2>
@@ -66,8 +66,7 @@ function DatePicker(props: { todayString: string }) {
         <input
           className="rounded-md focus:shadow-md focus:ring-2 focus:ring-blue-500/50 aria-[invalid=true]:border-red-500 
            aria-[invalid=true]:ring-red-500/50
-           aria-[invalid=true]:focus:border-red-700
-           "
+           aria-[invalid=true]:focus:border-red-700"
           id={inputId}
           aria-required
           aria-describedby={showError ? errorId : undefined}
