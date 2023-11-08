@@ -132,7 +132,7 @@ function SeparateFields(props: { todayString: string }) {
       }}
     >
       <div className="flex flex-col gap-2">
-        <span>Date of birth</span>
+        <span className={showError ? "text-red-500" : ""}>Date of birth</span>
         <div
           className={`[&:has(:focus)]ring-blue-500/50 flex flex-row rounded-md border border-gray-500 [&:has(:focus)]:border-blue-700 [&:has(:focus)]:shadow-md [&:has(:focus)]:ring-2 ${
             showError &&
