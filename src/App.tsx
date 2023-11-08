@@ -278,11 +278,13 @@ function SubmittedConfirmation(props: { dateString: string | null }) {
   return (
     props.dateString && (
       <div className="overflow-hidden rounded-md bg-blue-100 p-4 font-semibold text-blue-800">
-        Successfully submitted date of birth:{" "}
-        {new Date(props.dateString).toLocaleDateString(undefined, {
-          timeZone: "utc",
-          dateStyle: "medium",
-        })}
+        <div>Successfully submitted date of birth:</div>
+        <div className="font-normal">
+          {new Date(props.dateString).toLocaleDateString(undefined, {
+            timeZone: "utc",
+            dateStyle: "long",
+          })}
+        </div>
       </div>
     )
   );
