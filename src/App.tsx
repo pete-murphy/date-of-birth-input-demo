@@ -83,8 +83,18 @@ function DatePicker(props: { todayString: string }) {
           hintMessage=""
         />
       </div>
-      <div>
+      <div className="flex flex-row gap-2">
         <Button>Submit</Button>
+        <Button
+          onClick={() => {
+            setValue("");
+            setHasSubmitted(false);
+            setSuccessfullySubmitted(null);
+          }}
+          variant="secondary"
+        >
+          Reset
+        </Button>
       </div>
       <SubmittedConfirmation dateString={successfullySubmitted} />
     </form>
@@ -201,8 +211,20 @@ function SeparateFields(props: { todayString: string }) {
           hintMessage="For example: January 1, 1990"
         />
       </div>
-      <div>
+      <div className="flex flex-row gap-2">
         <Button>Submit</Button>
+        <Button
+          onClick={() => {
+            setMonthValue("");
+            setDayValue("");
+            setYearValue("");
+            setHasSubmitted(false);
+            setSuccessfullySubmitted(null);
+          }}
+          variant="secondary"
+        >
+          Reset
+        </Button>
       </div>
       {successfullySubmitted && (
         <SubmittedConfirmation dateString={successfullySubmitted} />
@@ -266,9 +288,22 @@ function errorMessageFor(params: {
   } else return null;
 }
 
-function Button(props: { children: React.ReactNode }) {
+function Button(props: {
+  children: React.ReactNode;
+  variant?: "primary" | "secondary";
+  onClick?: () => void;
+}) {
+  const variant = props.variant ?? "primary";
   return (
-    <button className="rounded-md bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-800 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+    <button
+      className={`rounded-md bg-blue-600 px-6 py-2 font-medium text-white transition-all hover:bg-blue-800 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
+        variant === "secondary"
+          ? "bg-transparent text-red-600 hover:bg-red-100 hover:text-red-800"
+          : ""
+      }`}
+      type={variant === "secondary" ? "button" : "submit"}
+      onClick={props.onClick}
+    >
       {props.children}
     </button>
   );
