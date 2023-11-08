@@ -1,5 +1,6 @@
 import React from "react";
 import * as DateFns from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
 
 export function App() {
   const now = new Date();
@@ -48,6 +49,7 @@ function DatePicker(props: { todayString: string }) {
   const showError = errorMessage != null && hasSubmitted;
   return (
     <form
+      noValidate
       className="m-auto flex max-w-md flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault();
@@ -71,6 +73,7 @@ function DatePicker(props: { todayString: string }) {
           aria-required
           aria-describedby={showError ? errorId : undefined}
           aria-invalid={showError}
+          max={props.todayString.split("T")[0]}
           type="date"
           value={value}
           onChange={(e) => setValue(e.target.value)}
@@ -84,7 +87,9 @@ function DatePicker(props: { todayString: string }) {
         />
       </div>
       <div className="flex flex-row gap-2">
-        <Button>Submit</Button>
+        <Button>
+          <span className="flex flex-row items-center gap-2">Submit</span>
+        </Button>
         <Button
           onClick={() => {
             setValue("");
@@ -93,7 +98,23 @@ function DatePicker(props: { todayString: string }) {
           }}
           variant="secondary"
         >
-          Reset
+          <span className="flex flex-row items-center gap-2">
+            Reset
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </span>
         </Button>
       </div>
       <SubmittedConfirmation dateString={successfullySubmitted} />
@@ -118,7 +139,10 @@ function SeparateFields(props: { todayString: string }) {
 
   const value =
     monthValue !== "" && dayValue !== "" && yearValue !== ""
-      ? `${yearValue}-${monthValue}-${dayValue.padStart(2, "0")}`
+      ? `${yearValue.padStart(4, "0")}-${monthValue}-${dayValue.padStart(
+          2,
+          "0",
+        )}`
       : "";
   const errorMessage = errorMessageFor({
     value,
@@ -129,6 +153,7 @@ function SeparateFields(props: { todayString: string }) {
   const showError = errorMessage != null && hasSubmitted;
   return (
     <form
+      noValidate
       className="m-auto flex max-w-md flex-col gap-4"
       onSubmit={(e) => {
         e.preventDefault();
@@ -152,7 +177,9 @@ function SeparateFields(props: { todayString: string }) {
             Month
           </label>
           <select
-            className="border-none bg-transparent focus:outline-none focus:ring-transparent data-[blank=true]:italic data-[blank=true]:text-gray-400"
+            className={`rounded-md border-none bg-transparent focus:outline-none focus:ring-transparent data-[blank=true]:italic data-[blank=true]:text-gray-400
+             ${showError ? "focus:bg-red-50" : "focus:bg-blue-100"}
+            `}
             id={monthInputId}
             data-blank={monthValue === ""}
             placeholder="Month"
@@ -184,8 +211,13 @@ function SeparateFields(props: { todayString: string }) {
             type="number"
             onChange={(e) => setDayValue(e.target.value)}
             inputMode="numeric"
+            min={1}
+            max={31}
+            maxLength={2}
             placeholder="Day"
-            className="w-[6ch] border-none text-right outline-none ring-transparent focus:ring-transparent [&::placeholder]:overflow-visible [&::placeholder]:italic [&::placeholder]:text-gray-400"
+            className={`w-[6ch] rounded-md border-none text-right outline-none ring-transparent focus:ring-transparent [&::placeholder]:overflow-visible [&::placeholder]:italic [&::placeholder]:text-gray-400 ${
+              showError ? "focus:bg-red-50" : "focus:bg-blue-100"
+            }`}
           />
           <div className="flex items-center">
             <span>,</span>
@@ -197,10 +229,14 @@ function SeparateFields(props: { todayString: string }) {
             id={dayInputId}
             value={yearValue}
             type="number"
+            max={props.todayString.slice(4)}
+            maxLength={4}
             onChange={(e) => setYearValue(e.target.value)}
             inputMode="numeric"
             placeholder="Year"
-            className="w-[8ch] border-none text-right outline-none ring-transparent focus:ring-transparent [&::placeholder]:overflow-visible  [&::placeholder]:italic [&::placeholder]:text-gray-400"
+            className={`w-[8ch] rounded-md border-none text-right outline-none ring-transparent focus:ring-transparent [&::placeholder]:overflow-visible  [&::placeholder]:italic [&::placeholder]:text-gray-400  ${
+              showError ? "focus:bg-red-50" : "focus:bg-blue-100"
+            }`}
           />
         </div>
         <Hint
@@ -212,7 +248,9 @@ function SeparateFields(props: { todayString: string }) {
         />
       </div>
       <div className="flex flex-row gap-2">
-        <Button>Submit</Button>
+        <Button>
+          <span className="flex flex-row items-center gap-2">Submit</span>
+        </Button>
         <Button
           onClick={() => {
             setMonthValue("");
@@ -223,12 +261,26 @@ function SeparateFields(props: { todayString: string }) {
           }}
           variant="secondary"
         >
-          Reset
+          <span className="flex flex-row items-center gap-2">
+            Reset
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </span>
         </Button>
       </div>
-      {successfullySubmitted && (
-        <SubmittedConfirmation dateString={successfullySubmitted} />
-      )}
+      <SubmittedConfirmation dateString={successfullySubmitted} />
     </form>
   );
 }
@@ -296,10 +348,10 @@ function Button(props: {
   const variant = props.variant ?? "primary";
   return (
     <button
-      className={`rounded-md px-6 py-1 font-medium transition-all focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 ${
+      className={`rounded-md px-6 py-2 font-medium transition-all focus:outline-none ${
         variant === "secondary"
-          ? "bg-transparent text-red-500 hover:bg-red-100 hover:text-red-600"
-          : "bg-blue-600 text-white hover:bg-blue-900"
+          ? "bg-transparent text-red-500 hover:bg-red-100 hover:text-red-600 focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2"
+          : "bg-blue-600 text-white hover:bg-blue-900 focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 "
       }`}
       type={variant === "secondary" ? "button" : "submit"}
       onClick={props.onClick}
@@ -311,16 +363,40 @@ function Button(props: {
 
 function SubmittedConfirmation(props: { dateString: string | null }) {
   return (
-    props.dateString && (
-      <div className="overflow-hidden rounded-md bg-blue-100 p-4 font-semibold text-blue-800">
-        <div>Successfully submitted date of birth:</div>
-        <div className="font-normal">
-          {new Date(props.dateString).toLocaleDateString(undefined, {
-            timeZone: "utc",
-            dateStyle: "long",
-          })}
-        </div>
-      </div>
-    )
+    <AnimatePresence>
+      {props.dateString && (
+        <motion.div
+          initial={{ height: 0 }}
+          animate={{ height: "auto" }}
+          style={{ overflow: "hidden" }}
+        >
+          <div className="rounded-md bg-blue-100 p-4 text-blue-800">
+            <div className="flex flex-row items-center gap-1 font-semibold">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="h-6 w-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 12.75l6 6 9-13.5"
+                />
+              </svg>
+              <span>Successfully submitted date of birth</span>
+            </div>
+            <div className="font-normal">
+              {new Date(props.dateString).toLocaleDateString(undefined, {
+                timeZone: "utc",
+                dateStyle: "long",
+              })}
+            </div>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 }
