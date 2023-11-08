@@ -109,7 +109,7 @@ function SeparateFields(props: { todayString: string }) {
 
   const value =
     monthValue !== "" && dayValue !== "" && yearValue !== ""
-      ? `${yearValue}-${monthValue}-${dayValue.padStart(1, "0")}`
+      ? `${yearValue}-${monthValue}-${dayValue.padStart(2, "0")}`
       : "";
   const errorMessage = errorMessageFor({
     value,
